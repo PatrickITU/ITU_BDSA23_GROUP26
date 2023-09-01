@@ -9,12 +9,15 @@ class Program
     
     static void Main(string[] args)
 {
+    string user = Environment.UserName;
     string cvsPath = "../Data/chirp_cli_db.csv";
     if (!File.Exists(cvsPath)){
         Console.WriteLine("CVS FILE NOT FOUND");
         Console.WriteLine(Directory.GetCurrentDirectory());
         return;
     }
+    if (args.Length == 0){
+
 
     using (var reader = new StreamReader(cvsPath)){
         var line = reader.ReadLine();
@@ -28,7 +31,16 @@ class Program
             DateTimeOffset addedTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse((timeOfChirp)));
             var convertedTime = addedTime.LocalDateTime;
             Console.WriteLine(cvsArray[0] + " @ " + convertedTime + ": " + cvsArray[1]);
+            
         }
+        return;
+    }
+        }
+    if (args[0] == "cheep"){
+        using (StreamWriter sw = File.AppendText(cvsPath)){
+            sw.WriteLine(user+","+"\""+args[1]+"\"" +","+DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        }
+        Console.WriteLine(args[1]);
     }
 }
 }
